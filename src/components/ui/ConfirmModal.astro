@@ -1,0 +1,90 @@
+<div id="confirm-modal" hidden class="fixed inset-0 z-[96]" role="alertdialog" aria-modal="true" aria-labelledby="cm-title" aria-describedby="cm-desc">
+  <div id="cm-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+  <div class="relative mx-auto mt-[28vh] w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-[var(--surface)]/95 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.7)] backdrop-blur-2xl animate-pop-in">
+    <div class="p-5">
+      <div class="flex items-start gap-3.5">
+        <span id="cm-icon" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-rose-500/25 bg-rose-500/10 text-rose-400">
+          <svg class="h-4.5 w-4.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </span>
+        <div class="min-w-0">
+          <h2 id="cm-title" class="text-[15px] font-semibold text-[var(--text-1)]"></h2>
+          <p id="cm-desc" class="mt-1 text-[13px] leading-relaxed text-[var(--text-2)]"></p>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end gap-2.5 border-t border-[var(--line)] px-5 py-3.5">
+      <button id="cm-cancel" type="button" class="inline-flex h-10 items-center rounded-lg border border-[var(--line)] px-4 text-[13px] font-medium text-[var(--text-2)] transition-all hover:border-[var(--line-strong)] hover:text-[var(--text-1)] active:scale-95">
+        Batal
+      </button>
+      <button id="cm-confirm" type="button" class="inline-flex h-10 items-center rounded-lg bg-gradient-to-br from-rose-500 to-rose-600 px-4 text-[13px] font-semibold text-white shadow-[0_8px_24px_-8px_rgba(244,63,94,0.5)] transition-all hover:brightness-110 active:scale-95">
+        Hapus
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById("confirm-modal")!;
+  const titleEl = document.getElementById("cm-title")!;
+  const descEl = document.getElementById("cm-desc")!;
+  const confirmBtn = document.getElementById("cm-confirm") as HTMLButtonElement;
+  const cancelBtn = document.getElementById("cm-cancel") as HTMLButtonElement;
+
+  interface ConfirmOptions {
+    title: string;
+    description?: string;
+    confirmLabel?: string;
+    danger?: boolean;
+  }
+
+  let pendingResolve: ((v: boolean) => void) | null = null;
+  let lastFocus: HTMLElement | null = null;
+
+  function finish(result: boolean) {
+    modal.hidden = true;
+    document.body.style.overflow = "";
+    lastFocus?.focus();
+    pendingResolve?.(result);
+    pendingResolve = null;
+  }
+
+  function open(opts: ConfirmOptions): Promise<boolean> {
+    if (pendingResolve) finish(false);
+    return new Promise((resolve) => {
+      pendingResolve = resolve;
+      titleEl.textContent = opts.title;
+      descEl.textContent = opts.description ?? "";
+      confirmBtn.textContent = opts.confirmLabel ?? "Hapus";
+      confirmBtn.className = opts.danger === false
+        ? "inline-flex h-10 items-center rounded-lg bg-gradient-to-br from-accent-500 to-accent-700 px-4 text-[13px] font-semibold text-white shadow-[0_8px_24px_-8px_var(--glow)] transition-all hover:brightness-110 active:scale-95"
+        : "inline-flex h-10 items-center rounded-lg bg-gradient-to-br from-rose-500 to-rose-600 px-4 text-[13px] font-semibold text-white shadow-[0_8px_24px_-8px_rgba(244,63,94,0.5)] transition-all hover:brightness-110 active:scale-95";
+      lastFocus = document.activeElement as HTMLElement | null;
+      modal.hidden = false;
+      document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => cancelBtn.focus());
+    });
+  }
+
+  window.addEventListener("confirm-request", (e) => {
+    const detail = (e as CustomEvent<ConfirmOptions>).detail;
+    open(detail).then((result) => {
+      window.dispatchEvent(new CustomEvent("confirm-result", { detail: { id: detail.title, result } }));
+    });
+  });
+
+  (window as unknown as { confirmDialog: (o: ConfirmOptions) => Promise<boolean> }).confirmDialog = open;
+
+  document.getElementById("cm-backdrop")?.addEventListener("click", () => finish(false));
+  confirmBtn.addEventListener("click", () => finish(true));
+  cancelBtn.addEventListener("click", () => finish(false));
+  window.addEventListener("keydown", (e) => {
+    if (modal.hidden) return;
+    if (e.key === "Escape") {
+      e.preventDefault();
+      finish(false);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      finish(true);
+    }
+  });
+</script>

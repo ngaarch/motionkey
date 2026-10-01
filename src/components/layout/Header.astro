@@ -1,0 +1,125 @@
+---
+import Logo from "./Logo.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+
+const links = [
+  { href: "/unlock", label: "Unlock" },
+  { href: "/guide", label: "Panduan" },
+  { href: "/faq", label: "FAQ" },
+  { href: "/status", label: "Status" },
+];
+
+const current = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const isActive = (href: string) => current === href || (href !== "/" && current.startsWith(href));
+---
+
+<header id="site-header" class="fixed inset-x-0 top-0 z-50 transition-transform duration-300">
+  <div class="glass-panel border-x-0 border-t-0">
+    <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6" aria-label="Navigasi utama">
+      <Logo />
+
+      <div class="hidden items-center gap-1 md:flex">
+        {links.map((l) => (
+          <a
+            href={l.href}
+            aria-current={isActive(l.href) ? "page" : undefined}
+            class:list={[
+              "rounded-lg px-3.5 py-2 text-[13.5px] font-medium transition-colors duration-200",
+              isActive(l.href)
+                ? "bg-[var(--card-hover)] text-[var(--text-1)]"
+                : "text-[var(--text-2)] hover:bg-[var(--card-hover)] hover:text-[var(--text-1)]",
+            ]}
+          >
+            {l.label}
+          </a>
+        ))}
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          id="cmdk-open"
+          type="button"
+          class="hidden h-9 items-center gap-2 rounded-lg border border-[var(--line)] bg-[var(--card)] px-3 text-[12.5px] text-[var(--text-3)] transition-colors hover:border-[var(--line-strong)] hover:text-[var(--text-2)] sm:flex"
+          aria-label="Buka command palette"
+        >
+          <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          Cari…
+          <kbd class="ml-2 flex items-center gap-0.5 rounded border border-[var(--line)] bg-[var(--input-bg)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--text-3)]">
+            <svg class="h-2.5 w-2.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"></path></svg>K
+          </kbd>
+        </button>
+
+        <ThemeToggle />
+
+        <a
+          href="/unlock"
+          class="shine hidden h-9 items-center rounded-lg bg-gradient-to-r from-accent-500 to-punch-500 px-4 text-[13px] font-medium text-white shadow-[0_8px_22px_-8px_var(--glow)] transition-all duration-300 hover:brightness-110 active:scale-95 sm:inline-flex"
+        >
+          Mulai Unlock
+        </a>
+
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          class="grid h-9 w-9 place-items-center rounded-lg border border-[var(--line)] bg-[var(--card)] text-[var(--text-2)] transition-colors hover:text-[var(--text-1)] md:hidden"
+          aria-label="Buka menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <div id="mobile-menu" hidden class="glass-panel mx-3 mt-2 rounded-2xl border p-2 shadow-2xl md:hidden">
+    {links.map((l) => (
+      <a
+        href={l.href}
+        class:list={[
+          "block rounded-xl px-4 py-3 text-sm font-medium transition-colors",
+          isActive(l.href) ? "bg-[var(--card-hover)] text-[var(--text-1)]" : "text-[var(--text-2)] hover:bg-[var(--card-hover)] hover:text-[var(--text-1)]",
+        ]}
+      >
+        {l.label}
+      </a>
+    ))}
+    <a href="/unlock" class="mt-1 block rounded-xl bg-gradient-to-br from-accent-500 to-accent-700 px-4 py-3 text-center text-sm font-semibold text-white">Mulai Unlock Sekarang</a>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  btn?.addEventListener("click", () => {
+    const open = !menu?.hidden;
+    if (menu) {
+      menu.hidden = open;
+      if (!open) {
+        menu.classList.remove("animate-pop-in");
+        void menu.offsetWidth;
+        menu.classList.add("animate-pop-in");
+      }
+    }
+    btn.setAttribute("aria-expanded", String(!open));
+  });
+  menu?.querySelectorAll("a").forEach((a) =>
+    a.addEventListener("click", () => {
+      if (menu) menu.hidden = true;
+      btn?.setAttribute("aria-expanded", "false");
+    }),
+  );
+
+  const header = document.getElementById("site-header");
+  let lastY = window.scrollY;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!header) return;
+      const y = window.scrollY;
+      header.style.transform = y > lastY && y > 140 ? "translateY(-100%)" : "translateY(0)";
+      lastY = y;
+    },
+    { passive: true },
+  );
+</script>

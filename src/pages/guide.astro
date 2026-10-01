@@ -1,0 +1,125 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/layout/PageHero.astro";
+import Icon from "@/components/Icon.astro";
+import Badge from "@/components/ui/Badge.astro";
+import { guideSteps } from "@/data/content";
+---
+
+<BaseLayout
+  title="Panduan Lengkap"
+  description="Panduan langkah demi langkah membuka Alight Motion Premium: dari masukkan email sampai verifikasi berhasil."
+>
+  <PageHero
+    eyebrow="Panduan"
+    icon="book-open"
+    title="Cara pakai, langkah demi langkah"
+    description="Empat langkah sederhana dari email kamu sampai premium aktif. Ikuti sesuai urutan supaya tidak ada yang terlewat."
+  />
+
+  <div id="guide-progress-track" class="fixed inset-x-0 top-16 z-40 h-0.5 bg-transparent">
+    <div id="guide-progress" class="h-full w-0 bg-gradient-to-r from-accent-500 to-accent-600 transition-[width] duration-150"></div>
+  </div>
+
+  <div class="relative mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+    <ol class="relative space-y-6 before:absolute before:bottom-8 before:left-[27px] before:top-8 before:w-px before:bg-gradient-to-b before:from-accent-500/50 before:via-[var(--line)] before:to-transparent">
+      {
+        guideSteps.map((step) => (
+          <li class="reveal relative" style={`--reveal-delay: ${step.n * 60}ms`}>
+            <div class="surface-card grain hover-lift relative ml-0 p-6 pl-[76px] sm:p-7 sm:pl-[84px]">
+              <span class="absolute left-5 top-6 grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-accent-500 to-accent-700 text-[15px] font-bold text-white shadow-[0_8px_22px_-8px_var(--glow)] sm:left-6">
+                {step.n}
+              </span>
+              <h2 class="text-[16.5px] font-semibold tracking-tight text-[var(--text-1)]">{step.title}</h2>
+              <p class="mt-2 text-[13.5px] leading-relaxed text-[var(--text-2)]">{step.description}</p>
+
+              <div class="mt-4 overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--input-bg)]">
+                <div class="flex items-center gap-1.5 border-b border-[var(--line)] px-3.5 py-2.5">
+                  <span class="h-2 w-2 rounded-full bg-rose-500/60" />
+                  <span class="h-2 w-2 rounded-full bg-amber-500/60" />
+                  <span class="h-2 w-2 rounded-full bg-mint-400/60" />
+                  <span class="ml-2 font-mono text-[10px] text-[var(--text-3)]">step-{step.n}.mock</span>
+                </div>
+                <div class="flex h-24 items-center justify-center gap-3 px-4 sm:h-28">
+                  {step.n === 1 && (
+                    <div class="flex w-full max-w-xs items-center gap-2 rounded-lg border border-accent-500/30 bg-accent-500/10 px-3.5 py-2.5">
+                      <Icon name="mail" class="h-4 w-4 shrink-0 text-accent-300" />
+                      <span class="flex-1 truncate font-mono text-[11px] text-accent-200">kamudati@gmail.com</span>
+                      <Icon name="clipboard-copy" class="h-3.5 w-3.5 shrink-0 text-[var(--text-3)]" />
+                    </div>
+                  )}
+                  {step.n === 2 && (
+                    <div class="w-full max-w-xs space-y-2">
+                      <div class="flex items-center gap-2 rounded-lg border border-[var(--line)] bg-[var(--card)] px-3.5 py-2.5">
+                        <Icon name="mail" class="h-4 w-4 shrink-0 text-[var(--text-3)]" />
+                        <span class="flex-1 truncate font-mono text-[11px] text-[var(--text-2)]">kamudati@gmail.com</span>
+                      </div>
+                      <div class="flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-accent-500 to-accent-700 py-2 text-[11px] font-semibold text-white">
+                        <Icon name="send" class="h-3 w-3" /> Kirim Link Verifikasi
+                      </div>
+                    </div>
+                  )}
+                  {step.n === 3 && (
+                    <div class="w-full max-w-xs space-y-1.5 rounded-lg border border-[var(--line)] bg-[var(--card)] p-3">
+                      <p class="text-[10.5px] font-medium text-[var(--text-3)]">Inbox — 1 pesan baru</p>
+                      <div class="flex items-center gap-2 rounded-md border border-accent-500/25 bg-accent-500/[0.07] px-2.5 py-2">
+                        <Icon name="mail-open" class="h-3.5 w-3.5 shrink-0 text-accent-300" />
+                        <span class="flex-1 truncate text-[10.5px] text-[var(--text-2)]">Verify your email — link di dalam</span>
+                      </div>
+                      <p class="truncate font-mono text-[9.5px] text-accent-300/80">https://…/__/auth/action?oobCode=AX9c…</p>
+                    </div>
+                  )}
+                  {step.n === 4 && (
+                    <div class="flex w-full max-w-xs flex-col items-center gap-2 rounded-lg border border-mint-500/25 bg-mint-500/[0.07] py-4">
+                      <span class="grid h-9 w-9 place-items-center rounded-full border border-mint-400/40 bg-mint-400/10">
+                        <Icon name="check" class="h-4.5 w-4.5 text-mint-300" />
+                      </span>
+                      <span class="text-[12px] font-bold text-mint-300">PREMIUM ACTIVE</span>
+                      <span class="text-[10px] text-[var(--text-3)]">response 1.8s · sukses</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <ul class="mt-4 space-y-2">
+                {
+                  step.tips.map((tip) => (
+                    <li class="flex gap-2.5 text-[12.5px] leading-relaxed text-[var(--text-3)]">
+                      <Icon name="sparkles" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-400" />
+                      {tip}
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="reveal mt-10 text-center">
+      <Badge tone="success" dot>Sudah paham?</Badge>
+      <h2 class="mt-4 text-2xl font-bold tracking-tight text-[var(--text-1)]">Langsung praktik sekarang</h2>
+      <p class="mx-auto mt-2 max-w-sm text-[13.5px] text-[var(--text-2)]">Wizard akan memandu kamu dengan validasi otomatis di tiap langkah.</p>
+      <a href="/unlock" class="mt-6 inline-flex h-12 items-center gap-2 rounded-xl bg-gradient-to-br from-accent-500 to-accent-700 px-7 text-[14px] font-semibold text-white shadow-[0_10px_30px_-10px_var(--glow)] transition-all duration-200 hover:brightness-110 active:scale-[0.98]">
+        <Icon name="rocket" class="h-4 w-4" />
+        Buka Unlock Wizard
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const bar = document.getElementById("guide-progress");
+    const track = document.getElementById("guide-progress-track");
+    function updateProgress() {
+      if (!bar || !track) return;
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+      bar.style.width = `${pct}%`;
+      track.style.opacity = pct > 1 ? "1" : "0";
+    }
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    updateProgress();
+  </script>
+</BaseLayout>

@@ -1,0 +1,284 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/layout/PageHero.astro";
+import Icon from "@/components/Icon.astro";
+---
+
+<BaseLayout
+  title="Status API"
+  description="Pantau kesehatan endpoint Zelora API secara real-time — response time, uptime, dan status operasional."
+>
+  <PageHero
+    eyebrow="Monitoring"
+    icon="activity"
+    title="Status API"
+    description="Health check real-time langsung dari browser kamu ke endpoint Zelora yang dipakai website ini."
+  />
+
+  <div class="relative mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+    <div class="mb-5 flex items-center justify-between">
+      <p class="inline-flex items-center gap-2 text-[12.5px] text-[var(--text-3)]">
+        <span id="status-checking" class="inline-flex items-center gap-1.5">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-live-ping rounded-full bg-accent-400"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-accent-400"></span>
+          </span>
+          Memeriksa endpoint…
+        </span>
+        <span id="status-updated" class="hidden"></span>
+      </p>
+      <div class="flex items-center gap-2">
+        <button id="status-auto" type="button" aria-pressed="true" class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-accent-500/30 bg-accent-500/10 px-3 text-[12.5px] font-medium text-accent-300 transition-all active:scale-95">
+          <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
+          Auto 60 dtk
+        </button>
+        <button id="status-refresh" type="button" class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[var(--line)] px-3 text-[12.5px] font-medium text-[var(--text-2)] transition-all hover:border-[var(--line-strong)] hover:text-[var(--text-1)] active:scale-95">
+          <Icon name="rotate-ccw" class="h-3.5 w-3.5" />
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <article id="svc-zelora-link" class="surface-card grain p-5" data-state="checking">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex items-start gap-3.5">
+            <span class="svc-icon grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[var(--line)] bg-[var(--input-bg)] text-[var(--text-3)]">
+              <Icon name="send" class="h-4.5 w-4.5" />
+            </span>
+            <div>
+              <h2 class="text-[14.5px] font-semibold text-[var(--text-1)]">Zelora — Send Verification Link</h2>
+              <p class="mt-0.5 font-mono text-[11.5px] text-[var(--text-3)]">GET zelora-api.vercel.app/amprem/send-link</p>
+            </div>
+          </div>
+          <span class="svc-badge inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--line)] px-2.5 py-1 text-[11px] font-medium text-[var(--text-3)]">memuat…</span>
+        </div>
+        <div class="svc-meta mt-4 grid grid-cols-3 gap-3 border-t border-[var(--line)] pt-4 text-[11.5px]">
+          <div><p class="text-[var(--text-3)]">Response</p><p class="svc-latency mt-0.5 font-mono text-[13px] font-medium text-[var(--text-2)]">—</p></div>
+          <div><p class="text-[var(--text-3)]">Status</p><p class="svc-code mt-0.5 font-mono text-[13px] font-medium text-[var(--text-2)]">—</p></div>
+          <div><p class="text-[var(--text-3)]">Role</p><p class="mt-0.5 text-[13px] font-medium text-[var(--text-2)]">Kirim link verifikasi</p></div>
+        </div>
+        <div class="svc-spark mt-3 hidden items-center gap-2.5 text-mint-300" data-spark>
+          <span class="text-[10px] font-medium uppercase tracking-[0.14em] text-[var(--text-3)]">Tren</span>
+          <svg class="h-7 flex-1" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true">
+            <polyline fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" points=""></polyline>
+          </svg>
+        </div>
+      </article>
+
+      <article id="svc-zelora-unlock" class="surface-card grain p-5" data-state="checking">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex items-start gap-3.5">
+            <span class="svc-icon grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[var(--line)] bg-[var(--input-bg)] text-[var(--text-3)]">
+              <Icon name="lock-open" class="h-4.5 w-4.5" />
+            </span>
+            <div>
+              <h2 class="text-[14.5px] font-semibold text-[var(--text-1)]">Zelora — Unlock Premium</h2>
+              <p class="mt-0.5 font-mono text-[11.5px] text-[var(--text-3)]">GET zelora-api.vercel.app/amprem/unlock</p>
+            </div>
+          </div>
+          <span class="svc-badge inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--line)] px-2.5 py-1 text-[11px] font-medium text-[var(--text-3)]">memuat…</span>
+        </div>
+        <div class="svc-meta mt-4 grid grid-cols-3 gap-3 border-t border-[var(--line)] pt-4 text-[11.5px]">
+          <div><p class="text-[var(--text-3)]">Response</p><p class="svc-latency mt-0.5 font-mono text-[13px] font-medium text-[var(--text-2)]">—</p></div>
+          <div><p class="text-[var(--text-3)]">Status</p><p class="svc-code mt-0.5 font-mono text-[13px] font-medium text-[var(--text-2)]">—</p></div>
+          <div><p class="text-[var(--text-3)]">Role</p><p class="mt-0.5 text-[13px] font-medium text-[var(--text-2)]">Aktivasi premium</p></div>
+        </div>
+        <div class="svc-spark mt-3 hidden items-center gap-2.5 text-mint-300" data-spark>
+          <span class="text-[10px] font-medium uppercase tracking-[0.14em] text-[var(--text-3)]">Tren</span>
+          <svg class="h-7 flex-1" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true">
+            <polyline fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" points=""></polyline>
+          </svg>
+        </div>
+      </article>
+    </div>
+
+    <section class="surface-card grain mt-8 p-5">
+      <h2 class="mb-3 inline-flex items-center gap-2 text-sm font-semibold text-[var(--text-1)]">
+        <Icon name="info" class="h-4 w-4 text-accent-400" />
+        Cara membaca status
+      </h2>
+      <ul class="space-y-2 text-[13px] leading-relaxed text-[var(--text-2)]">
+        <li class="flex gap-2.5"><Icon name="circle-check" class="mt-0.5 h-4 w-4 shrink-0 text-mint-400" /><span><strong class="font-medium text-[var(--text-1)]">Operasional</strong> — endpoint merespons dengan JSON valid. Kamu bisa lanjut unlock.</span></li>
+        <li class="flex gap-2.5"><Icon name="triangle-alert" class="mt-0.5 h-4 w-4 shrink-0 text-amber-400" /><span><strong class="font-medium text-[var(--text-1)]">Degraded</strong> — endpoint hidup tapi lambat atau sesekali gagal. Bisa jadi rate limit; tunggu sebentar.</span></li>
+        <li class="flex gap-2.5"><Icon name="circle-x" class="mt-0.5 h-4 w-4 shrink-0 text-rose-400" /><span><strong class="font-medium text-[var(--text-1)]">Down</strong> — endpoint tidak bisa dihubungi dari browser. Coba refresh, atau tunggu pemilik API memperbaiki.</span></li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  type CheckState = "up" | "degraded" | "down";
+  interface CheckResult {
+    id: string;
+    state: CheckState;
+    latency: string;
+    latencyMs: number;
+    code: string;
+  }
+
+  const TIMEOUT = 12000;
+  const HISTORY_KEY = "zu:status-history";
+  const AUTO_KEY = "zu:status-auto";
+  const REFRESH_MS = 60_000;
+
+  function readHistory(): Record<string, number[]> {
+    try {
+      return JSON.parse(sessionStorage.getItem(HISTORY_KEY) ?? "{}") as Record<string, number[]>;
+    } catch {
+      return {};
+    }
+  }
+
+  function pushLatency(id: string, ms: number) {
+    const h = readHistory();
+    h[id] = [...(h[id] ?? []), Math.round(ms)].slice(-8);
+    try {
+      sessionStorage.setItem(HISTORY_KEY, JSON.stringify(h));
+    } catch {
+      /* noop */
+    }
+  }
+
+  function drawSpark(id: string, state: CheckState) {
+    const spark = document.querySelector<HTMLElement>(`#${id} [data-spark]`);
+    if (!spark) return;
+    const values = readHistory()[id] ?? [];
+    if (values.length < 2) {
+      spark.classList.add("hidden");
+      spark.classList.remove("flex");
+      return;
+    }
+    spark.classList.remove("hidden");
+    spark.classList.add("flex");
+    const color = state === "up" ? "text-mint-300" : state === "degraded" ? "text-amber-300" : "text-rose-400";
+    spark.classList.remove("text-mint-300", "text-amber-300", "text-rose-400");
+    spark.classList.add(color);
+    const max = Math.max(...values, 1);
+    const pts = values.map((v, i) => {
+      const x = (i / (values.length - 1)) * 100;
+      const y = 26 - (v / max) * 22;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    });
+    spark.querySelector("polyline")?.setAttribute("points", pts.join(" "));
+  }
+
+  async function timedCheck(name: string, url: string): Promise<CheckResult> {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), TIMEOUT);
+    const start = performance.now();
+    try {
+      const res = await fetch(url, { signal: ctrl.signal, headers: { accept: "application/json" }, referrerPolicy: "no-referrer" });
+      const ms = performance.now() - start;
+      await res.json();
+      const latency = ms < 1000 ? `${Math.round(ms)}ms` : `${(ms / 1000).toFixed(2)}s`;
+      if (res.ok && ms < 5000) return { id: name, state: "up", latency, latencyMs: ms, code: String(res.status) };
+      return { id: name, state: "degraded", latency, latencyMs: ms, code: String(res.status) };
+    } catch {
+      return { id: name, state: "down", latency: "—", latencyMs: 0, code: "unreachable" };
+    } finally {
+      clearTimeout(t);
+    }
+  }
+
+  function applyState(id: string, r: CheckResult) {
+    const card = document.getElementById(id);
+    if (!card) return;
+    card.dataset.state = r.state;
+    const badge = card.querySelector<HTMLElement>(".svc-badge")!;
+    const icon = card.querySelector<HTMLElement>(".svc-icon")!;
+    const lat = card.querySelector<HTMLElement>(".svc-latency")!;
+    const code = card.querySelector<HTMLElement>(".svc-code")!;
+
+    const styles: Record<CheckState, { badge: string; iconCls: string; color: string }> = {
+      up: { badge: "border-mint-500/25 bg-mint-500/10 text-mint-300", iconCls: "border-mint-500/25 bg-mint-500/10 text-mint-300", color: "text-mint-300" },
+      degraded: { badge: "border-amber-500/25 bg-amber-500/10 text-amber-300", iconCls: "border-amber-500/25 bg-amber-500/10 text-amber-300", color: "text-amber-300" },
+      down: { badge: "border-rose-500/25 bg-rose-500/10 text-rose-400", iconCls: "border-rose-500/25 bg-rose-500/10 text-rose-400", color: "text-rose-400" },
+    };
+    const s = styles[r.state];
+    const labels: Record<CheckState, string> = { up: "operasional", degraded: "lambat", down: "tidak terjangkau" };
+
+    badge.className = `svc-badge inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium ${s.badge}`;
+    badge.innerHTML =
+      (r.state === "up"
+        ? '<span class="h-1.5 w-1.5 rounded-full bg-current"></span>'
+        : r.state === "down"
+          ? '<span class="h-1.5 w-1.5 rounded-full bg-current"></span>'
+          : '<span class="h-1.5 w-1.5 rounded-full bg-current"></span>') + labels[r.state];
+    icon.className = `svc-icon grid h-10 w-10 shrink-0 place-items-center rounded-xl border ${s.iconCls}`;
+    lat.textContent = r.latency;
+    lat.className = `svc-latency mt-0.5 font-mono text-[13px] font-medium ${s.color}`;
+    code.textContent = r.code;
+    drawSpark(id, r.state);
+  }
+
+  let inFlight = false;
+  async function runChecks() {
+    if (inFlight) return;
+    inFlight = true;
+    document.getElementById("status-updated")?.classList.add("hidden");
+    document.getElementById("status-checking")?.classList.remove("hidden");
+
+    const results = await Promise.all([
+      timedCheck("svc-zelora-link", "https://zelora-api.vercel.app/amprem/send-link?email=probe@zelora-unlock.local"),
+      timedCheck("svc-zelora-unlock", "https://zelora-api.vercel.app/amprem/unlock?email=probe@zelora-unlock.local&link=https://example.com"),
+    ]);
+
+    for (const r of results) {
+      if (r.latencyMs > 0) pushLatency(r.id, r.latencyMs);
+      applyState(r.id, r);
+    }
+    document.getElementById("status-checking")?.classList.add("hidden");
+    const upd = document.getElementById("status-updated")!;
+    upd.textContent = `Terakhir dicek ${new Date().toLocaleTimeString("id-ID")}`;
+    upd.classList.remove("hidden");
+    inFlight = false;
+  }
+
+  const autoBtn = document.getElementById("status-auto") as HTMLButtonElement | null;
+  let auto = true;
+  let autoTimer = 0;
+  try {
+    auto = sessionStorage.getItem(AUTO_KEY) !== "off";
+  } catch {
+    /* noop */
+  }
+
+  function syncAutoUI() {
+    if (!autoBtn) return;
+    autoBtn.setAttribute("aria-pressed", String(auto));
+    autoBtn.className = auto
+      ? "inline-flex h-9 items-center gap-1.5 rounded-lg border border-accent-500/30 bg-accent-500/10 px-3 text-[12.5px] font-medium text-accent-300 transition-all active:scale-95"
+      : "inline-flex h-9 items-center gap-1.5 rounded-lg border border-[var(--line)] px-3 text-[12.5px] font-medium text-[var(--text-2)] transition-all hover:border-[var(--line-strong)] hover:text-[var(--text-1)] active:scale-95";
+  }
+
+  function scheduleAuto() {
+    window.clearInterval(autoTimer);
+    if (auto) autoTimer = window.setInterval(runChecks, REFRESH_MS);
+  }
+
+  autoBtn?.addEventListener("click", () => {
+    auto = !auto;
+    try {
+      sessionStorage.setItem(AUTO_KEY, auto ? "on" : "off");
+    } catch {
+      /* noop */
+    }
+    syncAutoUI();
+    scheduleAuto();
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      window.clearInterval(autoTimer);
+    } else {
+      runChecks();
+      scheduleAuto();
+    }
+  });
+
+  document.getElementById("status-refresh")?.addEventListener("click", runChecks);
+  syncAutoUI();
+  runChecks();
+  scheduleAuto();
+</script>

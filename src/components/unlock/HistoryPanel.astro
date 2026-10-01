@@ -1,0 +1,140 @@
+---
+import Icon from "@/components/Icon.astro";
+---
+
+<section id="wz-history" class="spotlight-card surface-card grain p-5" aria-label="Riwayat aktivitas">
+  <div class="mb-4 flex items-center justify-between gap-3">
+    <h2 class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--text-1)]">
+      <Icon name="rotate-ccw" class="h-4 w-4 text-accent-400" />
+      Riwayat Terakhir
+    </h2>
+    <button id="wz-history-clear" type="button" class="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11.5px] text-[var(--text-3)] transition-colors hover:bg-rose-500/10 hover:text-rose-400">
+      <Icon name="trash-2" class="h-3 w-3" />
+      Hapus semua
+    </button>
+  </div>
+
+  <div id="wz-history-filter" class="mb-3 flex gap-1.5" role="tablist" aria-label="Filter riwayat">
+    <button type="button" data-filter="all" data-active="true" class="rounded-lg border border-accent-500/30 bg-accent-500/10 px-2.5 py-1 text-[11.5px] font-medium text-accent-300 transition-colors">Semua</button>
+    <button type="button" data-filter="send-link" class="rounded-lg border border-[var(--line)] px-2.5 py-1 text-[11.5px] text-[var(--text-3)] transition-colors hover:text-[var(--text-2)]">Send Link</button>
+    <button type="button" data-filter="unlock" class="rounded-lg border border-[var(--line)] px-2.5 py-1 text-[11.5px] text-[var(--text-3)] transition-colors hover:text-[var(--text-2)]">Unlock</button>
+  </div>
+
+  <div id="wz-history-list" class="space-y-2"></div>
+
+  <div id="wz-history-empty" class="flex flex-col items-center gap-2 py-8 text-center">
+    <span class="grid h-11 w-11 place-items-center rounded-xl border border-[var(--line)] bg-[var(--input-bg)] text-[var(--text-3)]">
+      <Icon name="inbox" class="h-5 w-5" />
+    </span>
+    <p class="text-[13px] font-medium text-[var(--text-2)]">Belum ada aktivitas</p>
+    <p class="max-w-[220px] text-[11.5px] leading-relaxed text-[var(--text-3)]">Riwayat kirim link dan unlock akan muncul di sini.</p>
+  </div>
+</section>
+
+<script>
+  import { getHistory, removeHistory, clearHistory } from "@/lib/storage";
+  import { timeAgo } from "@/lib/utils";
+  import type { HistoryKind } from "@/types";
+
+  const list = document.getElementById("wz-history-list")!;
+  const empty = document.getElementById("wz-history-empty")!;
+  let filter: HistoryKind | "all" = "all";
+
+  const KIND_ICON: Record<HistoryKind, string> = {
+    "send-link": '<svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>',
+    unlock: '<svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 7.9-.8"></path></svg>',
+  };
+
+  function render() {
+    const items = getHistory().filter((h) => filter === "all" || h.kind === filter);
+    list.textContent = "";
+    empty.classList.toggle("hidden", items.length > 0);
+    if (list.classList.contains("hidden")) list.classList.remove("hidden");
+
+    items.forEach((item, i) => {
+      const row = document.createElement("div");
+      row.className = "group flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[var(--card)] p-3 transition-all duration-300 hover:border-[var(--line-strong)]";
+      row.style.opacity = "0";
+      row.style.transform = "translateY(8px)";
+      row.style.transitionDelay = `${Math.min(i * 45, 400)}ms`;
+      requestAnimationFrame(() => {
+        row.style.opacity = "1";
+        row.style.transform = "translateY(0)";
+      });
+
+      const ok = item.status === "success";
+      row.innerHTML = `
+        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg border ${ok ? "border-mint-500/25 bg-mint-500/10 text-mint-300" : "border-rose-500/25 bg-rose-500/10 text-rose-400"}">${KIND_ICON[item.kind]}</span>
+        <div class="min-w-0 flex-1">
+          <p class="truncate font-mono text-[12px] text-[var(--text-1)]">${escapeHtml(item.email || item.detail)}</p>
+          <p class="mt-0.5 truncate text-[11px] text-[var(--text-3)]">${item.kind === "send-link" ? "Link terkirim" : ok ? "Premium aktif" : "Gagal"} · ${timeAgo(item.at)} · ${escapeHtml(item.responseTime)}</p>
+        </div>
+        <button type="button" data-copy="${escapeAttr(item.email || item.detail)}" aria-label="Salin" class="copy-btn grid h-7 w-7 shrink-0 place-items-center rounded-md text-[var(--text-3)] opacity-0 transition-all hover:text-[var(--text-1)] group-hover:opacity-100">
+          <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="14" height="14" rx="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+        </button>
+        <button type="button" data-del="${item.id}" aria-label="Hapus" class="grid h-7 w-7 shrink-0 place-items-center rounded-md text-[var(--text-3)] opacity-0 transition-all hover:text-rose-400 group-hover:opacity-100">
+          <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>`;
+
+      row.querySelector("[data-del]")?.addEventListener("click", () => {
+        window.dispatchEvent(
+          new CustomEvent("confirm-request", {
+            detail: { title: "Hapus entri ini?", description: item.email || item.detail, confirmLabel: "Hapus" },
+          }),
+        );
+        const onResult = (ev: Event) => {
+          const { id, result } = (ev as CustomEvent<{ id: string; result: boolean }>).detail;
+          if (id === "Hapus entri ini?") {
+            window.removeEventListener("confirm-result", onResult);
+            if (result) {
+              removeHistory(item.id);
+              render();
+            }
+          }
+        };
+        window.addEventListener("confirm-result", onResult);
+      });
+      list.appendChild(row);
+    });
+  }
+
+  function escapeHtml(s: string): string {
+    return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c);
+  }
+  function escapeAttr(s: string): string {
+    return escapeHtml(s).replace(/`/g, "&#96;");
+  }
+
+  document.querySelectorAll<HTMLButtonElement>("#wz-history-filter button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      filter = (btn.dataset.filter as HistoryKind | "all") ?? "all";
+      document.querySelectorAll<HTMLButtonElement>("#wz-history-filter button").forEach((b) => {
+        const active = b === btn;
+        b.dataset.active = String(active);
+        b.className = active
+          ? "rounded-lg border border-accent-500/30 bg-accent-500/10 px-2.5 py-1 text-[11.5px] font-medium text-accent-300 transition-colors"
+          : "rounded-lg border border-[var(--line)] px-2.5 py-1 text-[11.5px] text-[var(--text-3)] transition-colors hover:text-[var(--text-2)]";
+      });
+      render();
+    });
+  });
+
+  document.getElementById("wz-history-clear")?.addEventListener("click", () => {
+    window.dispatchEvent(
+      new CustomEvent("confirm-request", {
+        detail: { title: "Hapus semua riwayat?", description: "Seluruh riwayat aktivitas akan dihapus permanen dari perangkat ini.", confirmLabel: "Hapus Semua" },
+      }),
+    );
+  });
+
+  window.addEventListener("confirm-result", (e) => {
+    const { id, result } = (e as CustomEvent<{ id: string; result: boolean }>).detail;
+    if (id === "Hapus semua riwayat?" && result) {
+      clearHistory();
+      render();
+    }
+  });
+
+  window.addEventListener("zu:history-changed", render);
+  render();
+</script>

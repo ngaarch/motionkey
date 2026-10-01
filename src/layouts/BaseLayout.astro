@@ -1,0 +1,126 @@
+---
+import "@/styles/global.css";
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer.astro";
+import ToastHost from "@/components/ui/ToastHost.astro";
+import CommandPalette from "@/components/ui/CommandPalette.astro";
+import ConfirmModal from "@/components/ui/ConfirmModal.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogType?: string;
+}
+
+const {
+  title,
+  description = "Toolkit premium untuk unlock Alight Motion Premium: masukkan email, kirim link verifikasi, dan aktifkan akun premium dalam 3 langkah.",
+  ogType = "website",
+} = Astro.props;
+
+const siteName = "Zelora Unlock";
+const fullTitle = title.includes(siteName) ? title : `${title} · ${siteName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://zelora-unlock.vercel.app");
+const ogImage = new URL("/og.png", Astro.site ?? "https://zelora-unlock.vercel.app");
+---
+
+<!doctype html>
+<html lang="id" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f7f9" media="(prefers-color-scheme: light)" />
+
+    <link rel="preconnect" href="https://zelora-api.vercel.app" crossorigin />
+    <link rel="dns-prefetch" href="https://zelora-api.vercel.app" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content={`${siteName} — Unlock Alight Motion Premium`} />
+    <meta property="og:locale" content="id_ID" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={`${siteName} — Unlock Alight Motion Premium`} />
+
+    <script is:inline>
+      (function () {
+        var stored = null;
+        try {
+          stored = localStorage.getItem("zu:theme");
+        } catch (e) {}
+        var theme = stored === "light" || stored === "dark" ? stored : window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        if (theme === "light") document.documentElement.classList.add("light");
+      })();
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: "Zelora Unlock",
+      applicationCategory: "UtilitiesApplication",
+      operatingSystem: "Any",
+      description,
+      url: canonical,
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    })} />
+  </head>
+  <body class="grain min-h-dvh">
+    <div id="cursor-glow" aria-hidden="true"></div>
+
+    <button
+      id="back-to-top"
+      type="button"
+      aria-label="Kembali ke atas"
+      class="fixed bottom-5 left-5 z-[80] grid h-11 w-11 place-items-center rounded-full border border-[var(--line)] bg-[var(--surface)]/85 text-[var(--text-2)] opacity-0 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] backdrop-blur-lg transition-all duration-300 hover:border-[var(--line-strong)] hover:text-[var(--text-1)] translate-y-3 pointer-events-none [&.is-visible]:pointer-events-auto [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0"
+    >
+      <svg class="h-4.5 w-4.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"></path></svg>
+    </button>
+
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-accent-500 focus:px-4 focus:py-2 focus:text-sm focus:text-white"
+    >
+      Lewati ke konten utama
+    </a>
+
+    <Header />
+
+    <main id="main" class="page-enter relative z-10 pt-16">
+      <slot />
+    </main>
+
+    <Footer />
+    <ToastHost />
+    <CommandPalette />
+    <ConfirmModal />
+
+    <script>
+      import "@/scripts/global";
+    </script>
+    <script is:inline>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/sw.js").catch(function () {});
+        });
+      }
+    </script>
+  </body>
+</html>

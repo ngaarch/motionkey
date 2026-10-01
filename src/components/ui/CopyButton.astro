@@ -1,0 +1,21 @@
+---
+interface Props {
+  value?: string;
+  class?: string;
+  label?: string;
+  id?: string;
+}
+const { value = "", class: className = "", label = "Salin", id } = Astro.props;
+---
+
+<button
+  type="button"
+  id={id}
+  data-copy={value}
+  aria-label={label}
+  title={label}
+  class:list={["copy-btn inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[var(--line)] bg-[var(--card)] text-[var(--text-2)] transition-all duration-200 hover:border-[var(--line-strong)] hover:text-[var(--text-1)] active:scale-90", className]}
+>
+  <svg class="icon-copy h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="14" height="14" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+  <svg class="icon-done hidden h-3.5 w-3.5 text-mint-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+</button>

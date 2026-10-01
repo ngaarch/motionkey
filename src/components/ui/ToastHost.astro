@@ -1,0 +1,49 @@
+<div id="toast-region" aria-live="polite" class="pointer-events-none fixed bottom-4 right-4 z-[90] flex w-[calc(100vw-2rem)] max-w-sm flex-col gap-2.5 sm:bottom-6 sm:right-6"></div>
+
+<script>
+  import { subscribeToasts, dismissToast, type ToastItem } from "@/lib/toast";
+
+  const ICONS: Record<ToastItem["variant"], string> = {
+    success:
+      '<svg class="h-4 w-4 text-mint-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>',
+    error:
+      '<svg class="h-4 w-4 text-rose-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6M9 9l6 6"></path></svg>',
+    info: '<svg class="h-4 w-4 text-accent-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>',
+  };
+
+  const ACCENTS: Record<ToastItem["variant"], string> = {
+    success: "before:bg-mint-400",
+    error: "before:bg-rose-400",
+    info: "before:bg-accent-400",
+  };
+
+  const region = document.getElementById("toast-region")!;
+
+  function render(toasts: ToastItem[]) {
+    region.textContent = "";
+    for (const t of toasts) {
+      const el = document.createElement("div");
+      el.className = `pointer-events-auto relative overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--surface)]/95 p-4 pl-5 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] backdrop-blur-xl before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[''] ${ACCENTS[t.variant]} animate-toast-in`;
+      el.setAttribute("role", "status");
+      el.innerHTML = `
+        <div class="flex items-start gap-3">
+          <span class="mt-0.5 shrink-0">${ICONS[t.variant]}</span>
+          <div class="min-w-0 flex-1">
+            <p class="text-[13.5px] font-semibold text-[var(--text-1)]">${escapeHtml(t.title)}</p>
+            ${t.description ? `<p class="mt-0.5 text-[12.5px] leading-relaxed text-[var(--text-2)]">${escapeHtml(t.description)}</p>` : ""}
+          </div>
+          <button type="button" aria-label="Tutup notifikasi" class="shrink-0 rounded p-1 text-[var(--text-3)] transition-colors hover:text-[var(--text-1)]">
+            <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+          </button>
+        </div>`;
+      el.querySelector("button")?.addEventListener("click", () => dismissToast(t.id));
+      region.appendChild(el);
+    }
+  }
+
+  function escapeHtml(s: string): string {
+    return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c);
+  }
+
+  subscribeToasts(render);
+</script>

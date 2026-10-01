@@ -1,0 +1,33 @@
+<button
+  id="theme-toggle"
+  type="button"
+  aria-label="Ganti tema terang/gelap"
+  class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--card)] text-[var(--text-2)] transition-all duration-200 hover:border-[var(--line-strong)] hover:text-[var(--text-1)] active:scale-90"
+>
+  <svg class="icon-sun absolute h-4 w-4 transition-all duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+  </svg>
+  <svg class="icon-moon absolute h-4 w-4 scale-50 rotate-[-45deg] opacity-0 transition-all duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+  </svg>
+</button>
+
+<script>
+  const btn = document.getElementById("theme-toggle");
+  function syncToggleIcon() {
+    const isLight = document.documentElement.classList.contains("light");
+    btn?.querySelector(".icon-sun")?.classList.toggle("opacity-0", isLight);
+    btn?.querySelector(".icon-sun")?.classList.toggle("scale-50", isLight);
+    btn?.querySelector(".icon-sun")?.classList.toggle("rotate-45", isLight);
+    btn?.querySelector(".icon-moon")?.classList.toggle("opacity-0", !isLight);
+    btn?.querySelector(".icon-moon")?.classList.toggle("scale-50", !isLight);
+    btn?.querySelector(".icon-moon")?.classList.toggle("rotate-[-45deg]", !isLight);
+  }
+  syncToggleIcon();
+  window.addEventListener("themechange", syncToggleIcon);
+  btn?.addEventListener("click", () => {
+    const next = document.documentElement.classList.contains("light") ? "dark" : "light";
+    window.dispatchEvent(new CustomEvent("set-theme", { detail: { theme: next } }));
+  });
+</script>

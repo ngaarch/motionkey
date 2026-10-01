@@ -1,0 +1,134 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/layout/PageHero.astro";
+import Icon from "@/components/Icon.astro";
+import { faqs } from "@/data/content";
+---
+
+<BaseLayout
+  title="FAQ — Pertanyaan Umum"
+  description="Jawaban atas pertanyaan yang sering diajukan seputar unlock Alight Motion Premium, link verifikasi, dan keamanan data."
+>
+  <PageHero
+    eyebrow="Bantuan"
+    icon="life-buoy"
+    title="Pertanyaan yang sering diajukan"
+    description="Semua yang perlu kamu tahu tentang alur unlock, link verifikasi, dan privasi data."
+  />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  })} />
+
+  <div class="relative mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+    <div class="reveal mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div class="relative flex-1">
+        <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-3)]">
+          <Icon name="search" class="h-4 w-4" />
+        </span>
+        <input
+          id="faq-search"
+          type="search"
+          placeholder="Cari pertanyaan… (mis. kedaluwarsa, spam, HP)"
+          autocomplete="off"
+          class="h-12 w-full rounded-xl border border-[var(--line)] bg-[var(--input-bg)] pl-11 pr-10 text-[14px] text-[var(--text-1)] outline-none transition-all duration-200 placeholder:text-[var(--text-3)] focus:border-accent-500/60 focus:shadow-[0_0_0_3.5px_var(--glow-soft)]"
+        />
+        <button id="faq-search-clear" type="button" aria-label="Bersihkan pencarian" class="absolute right-3 top-1/2 hidden h-6 w-6 -translate-y-1/2 place-items-center rounded-md text-[var(--text-3)] transition-colors hover:text-[var(--text-1)]">
+          <Icon name="x" class="h-3.5 w-3.5" />
+        </button>
+      </div>
+      <span id="faq-count" class="shrink-0 rounded-full border border-[var(--line)] bg-[var(--card)] px-3 py-1.5 text-[11.5px] font-medium text-[var(--text-3)]"></span>
+    </div>
+
+    <div id="faq-list" class="space-y-3">
+      {
+        faqs.map((item, i) => (
+          <details class="reveal group surface-card grain overflow-hidden" style={`--reveal-delay: ${Math.min(i * 40, 320)}ms`} id={`faq-${i}`} data-faq-q={item.q.toLowerCase()} data-faq-a={item.a.toLowerCase()}>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-5 transition-colors hover:bg-[var(--card-hover)] [&::-webkit-details-marker]:hidden">
+              <span class="text-[14.5px] font-medium leading-snug text-[var(--text-1)]">{item.q}</span>
+              <span class="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-[var(--line)] text-[var(--text-3)] transition-transform duration-300 group-open:rotate-180 group-open:border-accent-500/40 group-open:text-accent-300">
+                <Icon name="chevron-down" class="h-3.5 w-3.5" />
+              </span>
+            </summary>
+            <div class="faq-answer">
+              <div>
+                <div class="border-t border-[var(--line)] px-5 py-4">
+                  <p class="text-[13.5px] leading-relaxed text-[var(--text-2)]">{item.a}</p>
+                </div>
+              </div>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+
+    <div id="faq-empty" hidden class="flex flex-col items-center gap-2 py-12 text-center">
+      <span class="grid h-11 w-11 place-items-center rounded-xl border border-[var(--line)] bg-[var(--input-bg)] text-[var(--text-3)]">
+        <Icon name="search" class="h-5 w-5" />
+      </span>
+      <p class="text-[13.5px] font-medium text-[var(--text-2)]">Tidak ada jawaban yang cocok</p>
+      <p class="max-w-[260px] text-[12px] leading-relaxed text-[var(--text-3)]">Coba kata kunci lain, atau lihat panduan lengkap untuk penjelasan tiap langkah.</p>
+    </div>
+
+    <div class="reveal surface-card grain mt-10 flex flex-col items-center gap-3 p-7 text-center">
+      <span class="grid h-11 w-11 place-items-center rounded-xl border border-accent-500/25 bg-accent-500/10 text-accent-300">
+        <Icon name="message-circle" class="h-5 w-5" />
+      </span>
+      <h2 class="text-[16px] font-semibold text-[var(--text-1)]">Masih ada yang mengganjal?</h2>
+      <p class="max-w-sm text-[13px] leading-relaxed text-[var(--text-2)]">
+        Cek panduan lengkap untuk penjelasan visual tiap langkah, atau lihat status API kalau ada yang terasa lambat.
+      </p>
+      <div class="mt-2 flex gap-2.5">
+        <a href="/guide" class="inline-flex h-10 items-center rounded-lg border border-[var(--line)] px-4 text-[13px] font-medium text-[var(--text-2)] transition-all hover:border-[var(--line-strong)] hover:text-[var(--text-1)]">Baca Panduan</a>
+        <a href="/status" class="inline-flex h-10 items-center rounded-lg border border-[var(--line)] px-4 text-[13px] font-medium text-[var(--text-2)] transition-all hover:border-[var(--line-strong)] hover:text-[var(--text-1)]">Cek Status API</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const inputEl = document.getElementById("faq-search") as HTMLInputElement | null;
+    const clearBtn = document.getElementById("faq-search-clear");
+    const countEl = document.getElementById("faq-count");
+    const items = Array.from(document.querySelectorAll<HTMLDetailsElement>("#faq-list details"));
+    const emptyEl = document.getElementById("faq-empty");
+
+    function applyFilter() {
+      const q = (inputEl?.value ?? "").trim().toLowerCase();
+      let visible = 0;
+      for (const d of items) {
+        const match = q === "" || (d.dataset.faqQ ?? "").includes(q) || (d.dataset.faqA ?? "").includes(q);
+        d.hidden = !match;
+        if (match) visible++;
+      }
+      if (emptyEl) emptyEl.hidden = visible > 0;
+      if (countEl) countEl.textContent = q === "" ? `${items.length} pertanyaan` : `${visible}/${items.length} cocok`;
+      if (clearBtn) clearBtn.style.display = q === "" ? "none" : "grid";
+    }
+
+    inputEl?.addEventListener("input", applyFilter);
+    clearBtn?.addEventListener("click", () => {
+      if (inputEl) {
+        inputEl.value = "";
+        inputEl.focus();
+      }
+      applyFilter();
+    });
+    applyFilter();
+
+    // Deep-link #faq-N: buka item yang dituju.
+    const hash = decodeURIComponent(window.location.hash.replace("#", ""));
+    if (hash.startsWith("faq-")) {
+      const target = document.getElementById(hash) as HTMLDetailsElement | null;
+      if (target) {
+        target.open = true;
+        setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "center" }), 250);
+      }
+    }
+  </script>
+</BaseLayout>

@@ -1,0 +1,69 @@
+---
+import { cn } from "@/lib/utils";
+
+type Variant = "primary" | "secondary" | "ghost" | "danger";
+type Size = "sm" | "md" | "lg";
+
+interface Props {
+  variant?: Variant;
+  size?: Size;
+  class?: string;
+  href?: string;
+  type?: "button" | "submit";
+  disabled?: boolean;
+  loading?: boolean;
+  id?: string;
+  [key: string]: unknown;
+}
+
+const { variant = "primary", size = "md", class: className, href, type = "button", disabled = false, loading = false, id, ...rest } = Astro.props;
+
+const sizes: Record<Size, string> = {
+  sm: "h-9 px-3.5 text-[13px] gap-1.5 rounded-lg",
+  md: "h-11 px-5 text-sm gap-2 rounded-xl",
+  lg: "h-[52px] px-7 text-[15px] gap-2.5 rounded-xl",
+};
+
+const variants: Record<Variant, string> = {
+  primary: "btn-primary",
+  secondary: "border border-[var(--line)] bg-[var(--card)] text-[var(--text-1)] hover:bg-[var(--card-hover)] hover:border-[var(--line-strong)]",
+  ghost: "text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-[var(--card-hover)]",
+  danger: "border border-rose-500/25 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500/40",
+};
+
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  href={href}
+  type={href ? undefined : type}
+  id={id}
+  class={cn(
+    "group/btn relative inline-flex select-none items-center justify-center overflow-hidden font-medium tracking-[-0.01em] whitespace-nowrap transition-all duration-200 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50",
+    sizes[size],
+    variants[variant],
+    className,
+  )}
+  disabled={href ? undefined : disabled || loading}
+  data-loading={loading ? "true" : undefined}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .btn-primary {
+    color: #fff;
+    background: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-700));
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.14) inset,
+      0 8px 22px -8px var(--glow);
+  }
+  .btn-primary:hover:not(:disabled) {
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.2) inset,
+      0 12px 34px -8px var(--glow);
+    filter: brightness(1.07);
+  }
+</style>

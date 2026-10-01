@@ -1,0 +1,76 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "@/components/Icon.astro";
+
+const year = new Date().getFullYear();
+
+const groups = [
+  {
+    title: "Produk",
+    links: [
+      { href: "/unlock", label: "Unlock Premium" },
+      { href: "/status", label: "Status API" },
+    ],
+  },
+  {
+    title: "Bantuan",
+    links: [
+      { href: "/guide", label: "Panduan Lengkap" },
+      { href: "/faq", label: "FAQ" },
+    ],
+  },
+  {
+    title: "Integrasi",
+    links: [{ href: "https://zelora-api.vercel.app", label: "Zelora API", external: true }],
+  },
+];
+---
+
+<footer class="relative mt-24 border-t border-[var(--line)]">
+  <div class="pointer-events-none absolute inset-x-0 -top-px mx-auto h-px max-w-3xl bg-gradient-to-r from-transparent via-accent-500/60 to-transparent"></div>
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div class="space-y-4">
+        <Logo />
+        <p class="max-w-xs text-[13.5px] leading-relaxed text-[var(--text-2)]">
+          All-in-one toolkit untuk membuka Alight Motion Premium — cepat, gratis, dan tanpa ribet.
+        </p>
+        <div class="flex items-center gap-2 text-[12px] text-[var(--text-3)]">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint-400 opacity-60"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-mint-400"></span>
+          </span>
+          Semua sistem operasional
+        </div>
+      </div>
+
+      {groups.map((g) => (
+        <div>
+          <h3 class="mb-4 text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--text-3)]">{g.title}</h3>
+          <ul class="space-y-2.5">
+            {g.links.map((l) => (
+              <li>
+                <a
+                  href={l.href}
+                  class="group inline-flex items-center gap-1.5 text-[13.5px] text-[var(--text-2)] transition-colors hover:text-[var(--text-1)]"
+                  {...("external" in l && l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  {l.label}
+                  {"external" in l && l.external && <Icon name="external-link" class="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-70" />}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[var(--line)] pt-7 sm:flex-row">
+      <p class="text-[12.5px] text-[var(--text-3)]">© {year} Zelora Unlock. Tidak berafiliasi dengan Alight Motion.</p>
+      <p class="inline-flex items-center gap-1.5 text-[12.5px] text-[var(--text-3)]">
+        Ditenagai oleh <span class="font-medium text-[var(--text-2)]">Zelora API</span>
+        <Icon name="zap" class="h-3.5 w-3.5 text-accent-400" />
+      </p>
+    </div>
+  </div>
+</footer>

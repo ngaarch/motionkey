@@ -1,0 +1,392 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/components/Icon.astro";
+
+const marqueeItems = [
+  "Verifikasi Kilat",
+  "Premium Aktif",
+  "100% Gratis",
+  "Tanpa Login",
+  "Riwayat Lokal",
+  "Open API",
+  "Alur 3 Langkah",
+];
+
+const steps = [
+  {
+    icon: "mail",
+    color: "accent",
+    title: "Masukkan Email",
+    description: "Tulis email aktif kamu — Gmail dan email biasa lainnya langsung didukung. Tidak perlu daftar apa pun.",
+  },
+  {
+    icon: "send",
+    color: "punch",
+    title: "Kirim Link Verifikasi",
+    description: "Zelora mengirimkan email verifikasi ke alamatmu dalam hitungan detik. Buka inbox, lalu salin linknya.",
+  },
+  {
+    icon: "lock-open",
+    color: "mint",
+    title: "Unlock Premium",
+    description: "Tempel link verifikasi, tekan unlock, dan akun Alight Motion kamu langsung naik kelas.",
+  },
+];
+
+const stepColor: Record<string, string> = {
+  accent: "from-accent-500/20 text-accent-300 border-accent-500/30",
+  punch: "from-punch-500/20 text-punch-300 border-punch-500/30",
+  mint: "from-mint-500/20 text-mint-300 border-mint-500/30",
+};
+
+const bento = [
+  {
+    href: "/unlock",
+    icon: "zap",
+    title: "Unlock Wizard",
+    description: "Alur 3 langkah interaktif dari email sampai premium aktif — progress tracker, validasi real-time, dan riwayat otomatis.",
+    tag: "Utama",
+    span: "md:col-span-2 md:row-span-2",
+    accentClass: "bg-gradient-to-br from-accent-500/15 via-transparent to-punch-500/10",
+    iconClass: "border-accent-500/30 bg-accent-500/10 text-accent-300",
+    featured: true,
+  },
+  {
+    href: "/faq",
+    icon: "life-buoy",
+    title: "Tanya Jawab",
+    description: "Jawaban ringkas untuk masalah umum: link kedaluwarsa, email tidak masuk, sampai gagal unlock.",
+    tag: "Bantuan",
+    span: "",
+    accentClass: "bg-gradient-to-br from-ice-400/10 via-transparent to-transparent",
+    iconClass: "border-ice-400/30 bg-ice-400/10 text-ice-300",
+    featured: false,
+  },
+  {
+    href: "/status",
+    icon: "activity",
+    title: "Status API",
+    description: "Health check real-time + sparkline tren latensi kedua endpoint Zelora.",
+    tag: "Monitoring",
+    span: "",
+    accentClass: "bg-gradient-to-br from-mint-500/10 via-transparent to-transparent",
+    iconClass: "border-mint-500/30 bg-mint-500/10 text-mint-300",
+    featured: false,
+  },
+  {
+    href: "/guide",
+    icon: "book-open",
+    title: "Panduan Visual",
+    description: "Empat langkah dengan ilustrasi mock interaktif — cocok untuk pemula.",
+    tag: "Bantuan",
+    span: "md:col-span-2",
+    accentClass: "bg-gradient-to-r from-sun-400/10 via-transparent to-punch-500/10",
+    iconClass: "border-sun-400/30 bg-sun-400/10 text-sun-300",
+    featured: false,
+  },
+];
+
+const stats = [
+  { value: 12400, suffix: "+", label: "Unlock berhasil", decimals: 0 },
+  { value: 1.8, suffix: " dtk", label: "Response rata-rata", decimals: 1 },
+  { value: 99.2, suffix: "%", label: "Success rate", decimals: 1 },
+  { value: 24, suffix: "/7", label: "API uptime", decimals: 0 },
+];
+---
+
+<BaseLayout
+  title="Unlock Alight Motion Premium Instantly"
+  description="Buka Alight Motion Premium dengan email kamu sendiri: kirim link verifikasi, tempel link dari inbox, dan aktifkan premium dalam 3 langkah — gratis dan tanpa login."
+>
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0" data-parallax="0.1" aria-hidden="true">
+      <div class="aurora-bg"></div>
+    </div>
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-500/50 to-transparent"></div>
+    <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,transparent,var(--page))] [bottom:-1px] h-24"></div>
+
+    <div class="relative mx-auto max-w-6xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24">
+      <div class="mx-auto max-w-3xl text-center">
+        <div class="reveal" style="--reveal-delay: 0ms">
+          <span class="sticker text-[12px] text-[var(--text-2)]">
+            <span class="flex h-4 items-end gap-[2.5px]" aria-hidden="true">
+              <span class="w-[3px] origin-bottom animate-eq rounded-full bg-accent-400" style="height: 14px; animation-delay: 0s"></span>
+              <span class="w-[3px] origin-bottom animate-eq rounded-full bg-punch-400" style="height: 10px; animation-delay: 0.15s"></span>
+              <span class="w-[3px] origin-bottom animate-eq rounded-full bg-ice-300" style="height: 12px; animation-delay: 0.3s"></span>
+              <span class="w-[3px] origin-bottom animate-eq rounded-full bg-sun-300" style="height: 8px; animation-delay: 0.45s"></span>
+            </span>
+            Ditenagai Zelora API
+          </span>
+        </div>
+
+        <h1 class="reveal mt-7 font-display text-balance text-[2.6rem] font-bold leading-[1.04] tracking-[-0.03em] text-[var(--text-1)] sm:text-6xl lg:text-[4.4rem]" style="--reveal-delay: 70ms">
+          Unlock Alight Motion
+          <span class="block overflow-hidden pb-1">
+            <span class="text-gradient-party inline-block">Premium Instantly</span>
+          </span>
+        </h1>
+        <p class="sr-only">Premium Instantly</p>
+
+        <p class="reveal mx-auto mt-6 max-w-xl text-pretty text-[15.5px] leading-relaxed text-[var(--text-2)] sm:text-base" style="--reveal-delay: 140ms">
+          Email kamu sendiri, link verifikasi, dan aktivasi premium — semuanya satu tempat.
+          Gratis, tanpa login, tanpa syarat. Selesai dalam waktu kurang dari satu menit.
+        </p>
+
+        <div class="reveal mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row" style="--reveal-delay: 210ms">
+          <a
+            href="/unlock"
+            class="magnetic shine group inline-flex h-[56px] w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-accent-500 via-accent-600 to-punch-500 bg-[length:200%_100%] bg-left px-9 text-[15px] font-semibold text-white shadow-[0_16px_44px_-14px_var(--glow)] transition-all duration-500 hover:bg-right hover:shadow-[0_20px_54px_-12px_rgba(236,72,153,0.4)] active:scale-[0.98] sm:w-auto"
+          >              <Icon name="rocket" class="h-4.5 w-4.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <span id="hero-cta-label" class="inline-block">Mulai Unlock Sekarang</span>
+            </a>
+          <a
+            href="/guide"
+            class="magnetic inline-flex h-[56px] w-full items-center justify-center gap-2 rounded-2xl border border-[var(--line)] bg-[var(--card)] px-8 text-[14.5px] font-medium text-[var(--text-2)] backdrop-blur transition-all duration-200 hover:border-[var(--line-strong)] hover:text-[var(--text-1)] active:scale-[0.98] sm:w-auto"
+          >
+            <Icon name="book-open" class="h-4 w-4" />
+            Lihat Cara Kerjanya
+          </a>
+        </div>
+
+        <p class="reveal mt-5 inline-flex items-center gap-2 text-[12px] text-[var(--text-3)]" style="--reveal-delay: 280ms">
+          <Icon name="shield-check" class="h-3.5 w-3.5 text-mint-400" />
+          Tanpa password · Tanpa registrasi · Data tersimpan lokal di browsermu
+        </p>
+      </div>
+
+      <div class="reveal relative mx-auto mt-14 max-w-3xl" style="--reveal-delay: 340ms">
+        <div class="grad-border rounded-2xl">
+          <div class="relative overflow-hidden rounded-2xl bg-[var(--card)]/60 p-6 backdrop-blur-xl sm:p-8">
+            <div class="aurora-bg pointer-events-none absolute inset-0 opacity-40" aria-hidden="true"></div>
+            <div class="relative grid gap-4 sm:grid-cols-3">
+              {
+                [
+                  { icon: "mail", label: "Masukkan Email", note: "Pakai email aktifmu" },
+                  { icon: "send", label: "Kirim Verifikasi", note: "Link dikirim ke inbox" },
+                  { icon: "lock-open", label: "Unlock", note: "Premium langsung aktif" },
+                ].map((s, i) => (
+                  <div class="spotlight-card surface-card relative flex items-center gap-3.5 p-4">
+                    <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-accent-500/30 bg-accent-500/10 text-accent-300">
+                      <Icon name={s.icon} class="h-4.5 w-4.5" />
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text-3)]">Langkah {i + 1}</p>
+                      <p class="truncate text-[13.5px] font-semibold text-[var(--text-1)]">{s.label}</p>
+                      <p class="truncate text-[11.5px] text-[var(--text-3)]">{s.note}</p>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+            <a href="/unlock" class="shine magnetic relative mt-5 flex h-[52px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent-500 to-punch-500 text-[14.5px] font-semibold text-white shadow-[0_12px_32px_-10px_var(--glow)] transition-all duration-300 hover:brightness-110 active:scale-[0.98]">
+              <Icon name="mouse-pointer-click" class="h-4.5 w-4.5" />
+              Coba Demo Alur 3 Langkah
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative border-y border-[var(--line)] bg-[var(--card)]/40 py-5" aria-hidden="true">
+    <div class="marquee-mask overflow-hidden">
+      <div class="flex w-max animate-marquee gap-10 pr-10">
+        {[0, 1].map(() =>
+          marqueeItems.map((item) => (
+            <span class="font-fun inline-flex items-center gap-2.5 whitespace-nowrap text-[15px] font-semibold text-[var(--text-2)]">
+              <Icon name="sparkles" class="h-4 w-4 text-accent-400" />
+              {item}
+            </span>
+          )),
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="relative mx-auto max-w-6xl px-4 py-20 sm:px-6">
+    <div class="mx-auto max-w-2xl text-center">
+      <span class="sticker text-[12px] text-[var(--text-2)]">Alur Kerja</span>
+      <h2 class="reveal mt-5 font-display text-balance text-3xl font-bold tracking-[-0.03em] text-[var(--text-1)] sm:text-4xl">
+        Tiga langkah, <span class="text-gradient">satu menit</span>, selesai
+      </h2>
+      <p class="reveal mt-3 text-pretty text-[15px] leading-relaxed text-[var(--text-2)]" style="--reveal-delay: 80ms">
+        Tidak perlu keahlian teknis. Ikuti wizard-nya, dan website ini yang mengatur sisanya.
+      </p>
+    </div>
+
+    <ol class="relative mt-14 grid gap-4 md:grid-cols-3">
+      <div class="pointer-events-none absolute left-0 right-0 top-10 hidden h-px bg-gradient-to-r from-accent-500/40 via-punch-500/40 to-mint-500/40 md:block" aria-hidden="true"></div>
+      {
+        steps.map((step, i) => (
+          <li class="reveal spotlight-card surface-card grain hover-lift group relative overflow-hidden p-6" style={`--reveal-delay: ${i * 90}ms`}>
+            <span class="pointer-events-none absolute -right-3 -top-7 select-none font-display text-[7.5rem] font-bold leading-none text-white/[0.03] transition-colors duration-500 group-hover:text-white/[0.06]">
+              {i + 1}
+            </span>
+            <span class={`relative grid h-12 w-12 place-items-center rounded-2xl border bg-gradient-to-br to-transparent ${stepColor[step.color]} transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110`}>
+              <Icon name={step.icon} class="h-5 w-5" />
+            </span>
+            <h3 class="relative mt-5 font-display text-[17px] font-semibold tracking-[-0.02em] text-[var(--text-1)]">{step.title}</h3>
+            <p class="relative mt-2 text-[13.5px] leading-relaxed text-[var(--text-2)]">{step.description}</p>
+            <p class="relative mt-5 inline-flex items-center gap-1.5 text-[11.5px] font-medium text-[var(--text-3)]">
+              Langkah {i + 1} dari 3
+              <Icon name="chevron-right" class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <dl class="reveal mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4" style="--reveal-delay: 120ms">
+      {
+        stats.map((s) => (
+          <div class="spotlight-card surface-card hover-lift flex flex-col p-4 text-center sm:p-5">
+            <dd
+              class="font-display order-1 bg-gradient-to-br from-accent-300 via-punch-300 to-accent-600 bg-clip-text text-2xl font-bold tracking-tight text-transparent sm:text-[1.7rem]"
+              data-count={s.value}
+              data-count-suffix={s.suffix}
+              data-count-decimals={s.decimals}
+            >
+              0{s.suffix}
+            </dd>
+            <dt class="order-2 mt-1 text-[11.5px] font-medium text-[var(--text-3)]">{s.label}</dt>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="relative mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+      <div>
+        <span class="sticker text-[12px] text-[var(--text-2)]">Semua Fitur</span>
+        <h2 class="reveal mt-5 font-display text-balance text-3xl font-bold tracking-[-0.03em] text-[var(--text-1)]">Satu toolkit, semua urusan</h2>
+      </div>
+      <a href="/unlock" class="reveal inline-flex items-center gap-1.5 text-[13.5px] font-medium text-accent-300 transition-colors hover:text-accent-400" style="--reveal-delay: 80ms">
+        Buka Unlock Wizard
+        <Icon name="arrow-right" class="h-3.5 w-3.5" />
+      </a>
+    </div>
+
+    <div class="mt-9 grid auto-rows-[minmax(150px,auto)] gap-4 md:grid-cols-3">
+      {
+        bento.map((tool, i) => (
+          <a
+            href={tool.href}
+            class={`reveal spotlight-card surface-card grain hover-lift group relative flex flex-col overflow-hidden p-6 ${tool.span}`}
+            style={`--reveal-delay: ${i * 80}ms`}
+          >
+            <div class={`pointer-events-none absolute inset-0 opacity-80 ${tool.accentClass}`} aria-hidden="true" />
+            <div class="relative flex items-start justify-between">
+              <span class={`grid h-11 w-11 place-items-center rounded-xl border transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 ${tool.iconClass}`}>
+                <Icon name={tool.icon} class="h-5 w-5" />
+              </span>
+              <span class="rounded-full border border-[var(--line)] px-2.5 py-0.5 text-[10.5px] font-medium text-[var(--text-3)]">{tool.tag}</span>
+            </div>
+            <h3 class={`relative mt-4 font-display font-semibold tracking-[-0.02em] text-[var(--text-1)] ${tool.featured ? "text-2xl sm:text-[1.7rem]" : "text-[16px]"}`}>{tool.title}</h3>
+            <p class="relative mt-2 flex-1 text-[13.5px] leading-relaxed text-[var(--text-2)]">{tool.description}</p>
+            {tool.featured && (
+              <div class="relative mt-5 flex flex-wrap gap-2" aria-hidden="true">
+                {["Step tracker", "Validasi Zod", "Confetti", "Riwayat"].map((chip) => (
+                  <span class="rounded-full border border-[var(--line)] bg-[var(--card)] px-2.5 py-1 text-[10.5px] text-[var(--text-3)]">{chip}</span>
+                ))}
+              </div>
+            )}
+            <span class="relative mt-5 inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[var(--text-3)] transition-colors group-hover:text-accent-300">
+              Buka halaman
+              <Icon name="arrow-right" class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="relative mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6">
+    <script>
+      // Efek decode/scramble di heading hero + rotasi CTA
+      const decodeTarget = document.querySelector("h1 .text-gradient-party");
+      if (decodeTarget) {
+        decodeTarget.classList.add("scramble-text");
+        const chars = "@#$%&*+=<>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const text = decodeTarget.textContent ?? "Premium Instantly";
+        decodeTarget.textContent = "";
+        decodeTarget.setAttribute("aria-label", text);
+        for (const ch of text) {
+          const span = document.createElement("span");
+          span.dataset.char = ch === " " ? "space" : "letter";
+          span.textContent = ch === " " ? "\u00A0" : ch;
+          if (ch === " ") span.style.width = "0.28em";
+          decodeTarget.appendChild(span);
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              io.disconnect();
+              decodeTarget.querySelectorAll<HTMLElement>("[data-char]").forEach((span, i) => {
+                const target = span.textContent ?? "";
+                if (span.dataset.char === "space") return;
+                const revealAt = 80 + i * 45;
+                const scrambleStart = performance.now() + revealAt - 260;
+                const tick = (now: number) => {
+                  if (now < scrambleStart) {
+                    span.textContent = chars[Math.floor(Math.random() * chars.length)];
+                    requestAnimationFrame(tick);
+                  } else {
+                    span.textContent = target;
+                  }
+                };
+                requestAnimationFrame(tick);
+              });
+              window.setTimeout(() => decodeTarget.classList.add("is-decoded"), 60);
+            }
+          },
+          { threshold: 0.4 },
+        );
+        io.observe(decodeTarget);
+      }
+
+      // Rotasi label CTA hero tiap 2.8 dtk
+      const ctaLabel = document.getElementById("hero-cta-label");
+      if (ctaLabel) {
+        const words = ["Mulai Unlock Sekarang", "Gratis, < 1 menit", "Tanpa login", "3 langkah selesai"];
+        let wi = 0;
+        window.setInterval(() => {
+          wi = (wi + 1) % words.length;
+          ctaLabel.style.opacity = "0";
+          ctaLabel.style.transform = "translateY(6px)";
+          window.setTimeout(() => {
+            ctaLabel.textContent = words[wi]!;
+            ctaLabel.style.transition = "opacity 0.25s ease, transform 0.25s ease";
+            ctaLabel.style.opacity = "1";
+            ctaLabel.style.transform = "translateY(0)";
+          }, 220);
+        }, 2800);
+      }
+    </script>
+    <div class="reveal grad-border overflow-hidden rounded-2xl">
+      <div class="relative overflow-hidden bg-gradient-to-br from-accent-500/[0.12] via-transparent to-punch-500/[0.12] px-6 py-16 text-center sm:px-12">
+        <div class="absolute inset-0 opacity-60" data-parallax="0.08" aria-hidden="true">
+          <div class="aurora-bg opacity-50"></div>
+        </div>
+        <span class="sticker relative text-[12px] text-[var(--text-2)]">
+          <Icon name="party-popper" class="h-3.5 w-3.5 text-sun-300" />
+          Gratis selamanya
+        </span>
+        <h2 class="relative mt-5 font-display text-balance text-3xl font-bold tracking-[-0.03em] text-[var(--text-1)] sm:text-4xl">
+          Siap membuka <span class="text-gradient-party">semua fitur premium?</span>
+        </h2>
+        <p class="relative mx-auto mt-3 max-w-md text-[14.5px] leading-relaxed text-[var(--text-2)]">
+          Prosesnya gratis dan butuh waktu kurang dari satu menit. Kalau gagal, ulangi — riwayatmu tersimpan otomatis.
+        </p>
+        <a
+          href="/unlock"
+          class="magnetic shine relative mt-8 inline-flex h-[56px] items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-accent-500 via-accent-600 to-punch-500 bg-[length:200%_100%] bg-left px-10 text-[15px] font-semibold text-white shadow-[0_16px_44px_-14px_var(--glow)] transition-all duration-500 hover:bg-right active:scale-[0.98]"
+        >
+          <Icon name="zap" class="h-4.5 w-4.5" />
+          Mulai Unlock Sekarang
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
