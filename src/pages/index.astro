@@ -104,6 +104,7 @@ const stats = [
     </div>
     <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-500/50 to-transparent"></div>
     <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,transparent,var(--page))] [bottom:-1px] h-24"></div>
+    <div class="pointer-events-none absolute inset-0 opacity-50" aria-hidden="true" data-hero-spotlight></div>
 
     <div class="relative mx-auto max-w-6xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24">
       <div class="mx-auto max-w-3xl text-center">
@@ -272,7 +273,7 @@ const stats = [
         bento.map((tool, i) => (
           <a
             href={tool.href}
-            class={`reveal spotlight-card surface-card grain hover-lift group relative flex flex-col overflow-hidden p-6 ${tool.span}`}
+            class={`reveal spotlight-card surface-card grain hover-lift group relative flex flex-col overflow-hidden p-6 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.005] ${tool.span}`}
             style={`--reveal-delay: ${i * 80}ms`}
           >
             <div class={`pointer-events-none absolute inset-0 opacity-80 ${tool.accentClass}`} aria-hidden="true" />
@@ -344,6 +345,18 @@ const stats = [
           { threshold: 0.4 },
         );
         io.observe(decodeTarget);
+      }
+
+      // Spotlight aurora mengikuti kursor di hero
+      const spotlight = document.querySelector<HTMLElement>("[data-hero-spotlight]");
+      if (spotlight) {
+        spotlight.style.background = "radial-gradient(560px circle at var(--sx, 50%) var(--sy, 30%), rgba(99,102,241,0.16), transparent 65%)";
+        const hero = spotlight.parentElement;
+        hero?.addEventListener("pointermove", (e) => {
+          const rect = hero.getBoundingClientRect();
+          spotlight.style.setProperty("--sx", `${((e.clientX - rect.left) / rect.width) * 100}%`);
+          spotlight.style.setProperty("--sy", `${((e.clientY - rect.top) / rect.height) * 100}%`);
+        });
       }
 
       // Rotasi label CTA hero tiap 2.8 dtk

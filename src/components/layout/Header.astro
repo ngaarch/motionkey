@@ -51,6 +51,15 @@ const isActive = (href: string) => current === href || (href !== "/" && current.
 
         <ThemeToggle />
 
+        <button
+          id="share-site"
+          type="button"
+          class="hidden h-9 w-9 place-items-center rounded-lg border border-[var(--line)] bg-[var(--card)] text-[var(--text-2)] transition-colors hover:border-[var(--line-strong)] hover:text-[var(--text-1)] sm:grid"
+          aria-label="Bagikan MotionKey"
+        >
+          <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
+        </button>
+
         <a
           href="/unlock"
           class="shine hidden h-9 items-center rounded-lg bg-gradient-to-r from-accent-500 to-punch-500 px-4 text-[13px] font-medium text-white shadow-[0_8px_22px_-8px_var(--glow)] transition-all duration-300 hover:brightness-110 active:scale-95 sm:inline-flex"
@@ -85,10 +94,13 @@ const isActive = (href: string) => current === href || (href !== "/" && current.
       </a>
     ))}
     <a href="/unlock" class="mt-1 block rounded-xl bg-gradient-to-br from-accent-500 to-accent-700 px-4 py-3 text-center text-sm font-semibold text-white">Mulai Unlock Sekarang</a>
+    <button id="share-site-mobile" type="button" class="mt-1 block w-full rounded-xl border border-[var(--line)] px-4 py-3 text-center text-sm font-medium text-[var(--text-2)] transition-colors hover:text-[var(--text-1)]">Bagikan MotionKey</button>
   </div>
 </header>
 
 <script>
+  import { toast } from "@/lib/toast";
+
   const btn = document.getElementById("mobile-menu-btn");
   const menu = document.getElementById("mobile-menu");
   btn?.addEventListener("click", () => {
@@ -122,4 +134,31 @@ const isActive = (href: string) => current === href || (href !== "/" && current.
     },
     { passive: true },
   );
+
+  async function shareSite() {
+    const data = {
+      title: "MotionKey — Unlock Alight Motion Premium",
+      text: "Unlock Alight Motion Premium gratis dalam 3 langkah — tanpa login.",
+      url: window.location.origin,
+    };
+    const nav = navigator as Navigator & { share?: (d: typeof data) => Promise<void> };
+    if (nav.share) {
+      try {
+        await nav.share(data);
+      } catch {
+        /* user dismissed */
+      }
+    } else {
+      navigator.clipboard
+        .writeText(`${data.text} ${data.url}`)
+        .then(() => toast({ title: "Link disalin", description: "Siap dibagikan ke temanmu", variant: "success" }))
+        .catch(() => toast({ title: "Gagal menyalin link", variant: "error" }));
+    }
+  }
+  document.getElementById("share-site")?.addEventListener("click", shareSite);
+  document.getElementById("share-site-mobile")?.addEventListener("click", () => {
+    if (menu) menu.hidden = true;
+    btn?.setAttribute("aria-expanded", "false");
+    shareSite();
+  });
 </script>

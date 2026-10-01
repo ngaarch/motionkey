@@ -1,10 +1,10 @@
 import type { HistoryEntry, HistoryKind, ThemeMode } from "@/types";
 
 const KEYS = {
-  history: "zu:history",
-  lastEmail: "zu:last-email",
-  recentEmails: "zu:recent-emails",
-  theme: "zu:theme",
+  history: "mk:history",
+  lastEmail: "mk:last-email",
+  recentEmails: "mk:recent-emails",
+  theme: "mk:theme",
 } as const;
 
 const MAX_RECENT_EMAILS = 3;

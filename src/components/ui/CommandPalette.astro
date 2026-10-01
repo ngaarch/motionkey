@@ -103,7 +103,7 @@
             window.removeEventListener("confirm-result", onResult);
             if (result) {
               clearHistory();
-              window.dispatchEvent(new CustomEvent("zu:history-changed"));
+              window.dispatchEvent(new CustomEvent("mk:history-changed"));
               toast({ title: "Riwayat dihapus", variant: "success" });
             }
           }
@@ -115,7 +115,7 @@
 
   const fuse = new Fuse(items, { keys: ["label", "hint", "keywords"], threshold: 0.35, ignoreLocation: true });
 
-  const RECENT_KEY = "zu:recent-pages";
+  const RECENT_KEY = "mk:recent-pages";
   function getRecents(): string[] {
     try {
       const raw = JSON.parse(localStorage.getItem(RECENT_KEY) ?? "[]") as string[];

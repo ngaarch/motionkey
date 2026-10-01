@@ -42,7 +42,7 @@ export const faqs: FaqItem[] = [
   },
   {
     q: "Website ini berafiliasi dengan Alight Motion?",
-    a: "Tidak. Zelora Unlock adalah tool komunitas yang memanfaatkan endpoint publik Zelora API. Semua merek dagang milik pemiliknya masing-masing.",
+    a: "Tidak. MotionKey adalah tool komunitas yang memanfaatkan endpoint publik Zelora API. Semua merek dagang milik pemiliknya masing-masing.",
   },
 ];
 

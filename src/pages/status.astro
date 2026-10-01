@@ -54,8 +54,8 @@ import Icon from "@/components/Icon.astro";
           <span class="svc-badge inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--line)] px-2.5 py-1 text-[11px] font-medium text-[var(--text-3)]">memuat…</span>
         </div>
         <div class="svc-meta mt-4 grid grid-cols-3 gap-3 border-t border-[var(--line)] pt-4 text-[11.5px]">
-          <div><p class="text-[var(--text-3)]">Response</p><p class="svc-latency mt-0.5 font-mono text-[13px] font-medium text-[var(--text-2)]">—</p></div>
-          <div><p class="text-[var(--text-3)]">Status</p><p class="svc-code mt-0.5 font-mono text-[13px] font-medium text-[var(--text-2)]">—</p></div>
+          <div><p class="text-[var(--text-3)]">Response</p><p class="svc-latency mt-0.5 font-mono text-[13px] font-medium tabular-nums text-[var(--text-2)]">—</p></div>
+          <div><p class="text-[var(--text-3)]">Status</p><p class="svc-code mt-0.5 font-mono text-[13px] font-medium tabular-nums text-[var(--text-2)]">—</p></div>
           <div><p class="text-[var(--text-3)]">Role</p><p class="mt-0.5 text-[13px] font-medium text-[var(--text-2)]">Kirim link verifikasi</p></div>
         </div>
         <div class="svc-spark mt-3 hidden items-center gap-2.5 text-mint-300" data-spark>
@@ -80,8 +80,8 @@ import Icon from "@/components/Icon.astro";
           <span class="svc-badge inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--line)] px-2.5 py-1 text-[11px] font-medium text-[var(--text-3)]">memuat…</span>
         </div>
         <div class="svc-meta mt-4 grid grid-cols-3 gap-3 border-t border-[var(--line)] pt-4 text-[11.5px]">
-          <div><p class="text-[var(--text-3)]">Response</p><p class="svc-latency mt-0.5 font-mono text-[13px] font-medium text-[var(--text-2)]">—</p></div>
-          <div><p class="text-[var(--text-3)]">Status</p><p class="svc-code mt-0.5 font-mono text-[13px] font-medium text-[var(--text-2)]">—</p></div>
+          <div><p class="text-[var(--text-3)]">Response</p><p class="svc-latency mt-0.5 font-mono text-[13px] font-medium tabular-nums text-[var(--text-2)]">—</p></div>
+          <div><p class="text-[var(--text-3)]">Status</p><p class="svc-code mt-0.5 font-mono text-[13px] font-medium tabular-nums text-[var(--text-2)]">—</p></div>
           <div><p class="text-[var(--text-3)]">Role</p><p class="mt-0.5 text-[13px] font-medium text-[var(--text-2)]">Aktivasi premium</p></div>
         </div>
         <div class="svc-spark mt-3 hidden items-center gap-2.5 text-mint-300" data-spark>
@@ -118,8 +118,8 @@ import Icon from "@/components/Icon.astro";
   }
 
   const TIMEOUT = 12000;
-  const HISTORY_KEY = "zu:status-history";
-  const AUTO_KEY = "zu:status-auto";
+  const HISTORY_KEY = "mk:status-history";
+  const AUTO_KEY = "mk:status-auto";
   const REFRESH_MS = 60_000;
 
   function readHistory(): Record<string, number[]> {

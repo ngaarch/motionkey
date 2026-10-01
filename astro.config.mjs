@@ -5,7 +5,7 @@ import vercel from "@astrojs/vercel";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "https://zelora-unlock.vercel.app",
+  site: "https://motionkey.vercel.app",
   output: "static",
   prefetch: {
     prefetchAll: true,

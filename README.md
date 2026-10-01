@@ -1,4 +1,4 @@
-# Zelora Unlock
+# MotionKey
 
 <div align="center">
 
@@ -12,21 +12,33 @@ Website tools fungsional (bukan dokumentasi) yang mengintegrasikan [Zelora API](
 
 ---
 
+## Halaman
+
+| Route | Deskripsi |
+| --- | --- |
+| `/` | Beranda: hero aurora spotlight, demo alur, bento grid fitur |
+| `/unlock` | Wizard unlock 3 langkah + demo card "API live" + riwayat |
+| `/guide` | Panduan visual 4 langkah dengan mock interaktif |
+| `/faq` | FAQ dengan pencarian live + deep-link `#faq-N` |
+| `/status` | Health check real-time kedua endpoint Zelora |
+| `/changelog` | Riwayat rilis per versi |
+
 ## Fitur
 
-- **Unlock Wizard 3 langkah** — masukkan email → kirim link verifikasi → unlock premium, dengan progress tracker interaktif, validasi real-time (Zod), state sukses ber-confetti, dan error handling ramah berbahasa Indonesia.
+- **Unlock Wizard 3 langkah** — masukkan email → kirim link verifikasi → unlock premium, dengan progress tracker interaktif (dibacakan screen reader), validasi real-time (Zod), state sukses ber-confetti, dan error handling ramah berbahasa Indonesia.
 - **Riwayat lokal (localStorage)** — maksimal 12 entri terakhir dengan filter per jenis aksi, copy, dan hapus per item.
+- **Email terakhir dipakai ulang** — 3 email terakhir tersimpan sebagai chips yang bisa diklik sekali tap di Step 1 wizard.
 - **Status API real-time** — health check dari browser ke kedua endpoint Zelora, sparkline tren latensi 8 cek terakhir, auto-refresh 60 detik (bisa dimatikan), pause saat tab tidak aktif.
+- **Tombol Bagikan** — Web Share API di header (desktop + mobile) dengan fallback salin link + toast.
+- **Pencarian FAQ** — filter pertanyaan secara live dengan badge jumlah hasil, tombol clear, dan deep-link `#faq-N` langsung membuka item terkait.
 - **Deep-link wizard** — URL otomatis menyimpan `?email=…&step=…` sehingga proses bisa dilanjutkan kapan saja; email terakhir juga di-restore otomatis.
 - **Confirm dialog premium** — aksi destruktif (hapus riwayat) selalu melewati dialog konfirmasi.
 - **Cooldown kirim link** — tombol kirim verifikasi punya cooldown 30 detik yang tersimpan di localStorage untuk mencegah spam/rate limit.
-- **Command palette (Ctrl/Cmd + K)** — navigasi cepat antar halaman dengan pencarian fuzzy (Fuse.js).
+- **Command palette (Ctrl/Cmd + K)** — navigasi cepat antar halaman dengan pencarian fuzzy (Fuse.js) + section "Terakhir dibuka".
 - **Dark/Light mode** — persist di localStorage + ikut preferensi sistem, tanpa flash saat load.
-- **Desain premium** — glassmorphism ringan, grain texture, border gradient animasi, micro-interactions, smooth scroll (Lenis), animasi entrance (Motion), ikon Lucide inline.
-- **Email terakhir dipakai ulang** — 3 email terakhir tersimpan sebagai chips yang bisa diklik sekali tap di Step 1 wizard.
-- **Pencarian FAQ** — filter pertanyaan secara live dengan badge jumlah hasil, tombol clear, dan deep-link `#faq-N` langsung membuka item terkait.
+- **Desain premium** — glassmorphism ringan, grain texture, aurora spotlight mengikuti kursor, teks scramble di hero, border gradient animasi, micro-interactions, smooth scroll (Lenis), animasi entrance (Motion), ikon Lucide inline.
 - **Offline PWA** — service worker (`public/sw.js`) dengan network-first untuk halaman dan cache-first untuk aset, plus precache halaman utama agar situs tetap terbuka saat offline.
-- **SEO & PWA** — meta OG/Twitter + gambar share PNG (`og.png`), JSON-LD `WebApplication` & `FAQPage`, canonical, sitemap, web manifest dengan ikon 192/512 + maskable, apple-touch-icon, security headers di `vercel.json`.
+- **SEO & aksesibilitas** — meta OG/Twitter + gambar share PNG (`og.png`), JSON-LD `WebApplication` & `FAQPage`, canonical, sitemap, security headers di `vercel.json`, skip-link, `<noscript>` fallback di wizard, `aria-live` untuk progres & toast.
 
 ## Cara Kerja
 
@@ -72,12 +84,12 @@ src/
 ├── components/
 │   ├── layout/        Logo, Header, Footer, ThemeToggle, PageHero
 │   ├── unlock/        UnlockWizard, HistoryPanel
-│   └── ui/            Button, Badge, CopyButton, Skeleton, ToastHost, CommandPalette
+│   └── ui/            Button, Badge, CopyButton, Skeleton, ToastHost, CommandPalette, ConfirmModal
 ├── data/              Konten FAQ & panduan
 ├── layouts/           BaseLayout (SEO/OG, theme bootstrap, chrome global)
 ├── lib/               api.ts, storage.ts, toast.ts, confetti.ts, motion.ts, utils.ts
-├── pages/             index, unlock, guide, faq, status, 404
-├── scripts/           global.ts (theme, Lenis, reveal, copy, Cmd+K, tilt)
+├── pages/             index, unlock, guide, faq, status, changelog, 404
+├── scripts/           global.ts (theme, Lenis, reveal, copy, Cmd+K, scroll-progress, decode, tilt, prefetch)
 ├── styles/            global.css (design system)
 └── types/             Tipe bersama + deklarasi modul ikon
 ```
@@ -102,6 +114,14 @@ Klien API di `src/lib/api.ts` menyediakan timeout 20 detik dan pemetaan error
 
 Security headers dan cache strategy (`/_astro/*` immutable 1 tahun, `sw.js` no-cache) sudah dikonfigurasi di `vercel.json`.
 
+### Ganti domain
+
+Jika memakai domain kustom, update tiga tempat agar canonical/OG/sitemap tetap konsisten:
+
+1. `site` di `astro.config.mjs`
+2. Fallback URL di `src/layouts/BaseLayout.astro` (`canonical` & `ogImage`)
+3. URL sitemap di `public/robots.txt`
+
 ### Regenerasi aset gambar
 
 Jika mengubah `public/og.svg` atau `public/favicon.svg`, regenerate PNG-nya (butuh `rsvg-convert`):
@@ -118,4 +138,4 @@ Naikkan `VERSION` di `public/sw.js` setelah mengubah aset yang di-precache agar 
 ## Catatan
 
 - Proyek ini tidak berafiliasi dengan Alight Motion. Semua merek dagang milik pemiliknya masing-masing.
-- Riwayat aktivitas tersimpan murni di `localStorage` perangkat kamu — tidak ada backend yang mencatat data.
+- Riwayat aktivitas tersimpan murni di `localStorage` perangkat kamu (prefiks key `mk:`) — tidak ada backend yang mencatat data.

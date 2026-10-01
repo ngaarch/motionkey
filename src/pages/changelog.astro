@@ -1,0 +1,113 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHero from "@/components/layout/PageHero.astro";
+import Icon from "@/components/Icon.astro";
+
+interface Change {
+  icon: string;
+  text: string;
+}
+
+interface Release {
+  version: string;
+  date: string;
+  tag: string;
+  tagClass: string;
+  summary: string;
+  sections: { title: string; items: Change[] }[];
+}
+
+const releases: Release[] = [
+  {
+    version: "1.0.0",
+    date: "1 Oktober 2026",
+    tag: "Rilis besar",
+    tagClass: "border-accent-500/30 bg-accent-500/10 text-accent-300",
+    summary: "MotionKey resmi tayang — rebrand penuh dari nama sebelumnya dengan fitur, visual, dan aksesibilitas yang ditingkatkan.",
+    sections: [
+      {
+        title: "Baru",
+        items: [
+          { icon: "sparkle", text: "Rebrand lengkap ke MotionKey: logo kunci baru, favicon, ikon PWA, dan OG image." },
+          { icon: "share-2", text: "Tombol \"Bagikan MotionKey\" di header — Web Share API dengan fallback salin link." },
+          { icon: "clock", text: "Halaman changelog ini: semua update versi terdokumentasi rapi." },
+        ],
+      },
+      {
+        title: "Ditingkatkan",
+        items: [
+          { icon: "zap", text: "Aurora hero di beranda: gradien aurora besar yang bergerak lambat + glow spotlight mengikuti kursor." },
+          { icon: "layout-grid", text: "Hover bento grid lebih responsif dengan lift & scale ringan." },
+          { icon: "hash", text: "Angka di tabel status API memakai tabular-nums agar tidak bergoyang saat refresh." },
+        ],
+      },
+      {
+        title: "Aksesibilitas",
+        items: [
+          { icon: "accessibility", text: "Progress tracker wizard punya teks status tersembunyi (sr-only) untuk screen reader." },
+          { icon: "circle-check-big", text: "Tombol status \"Auto 60 dtk\" kini membaca state aktif/nonaktif via aria-pressed." },
+          { icon: "message-circle", text: "Pengumuman toast membaca dinamis melalui role=status dan aria-live=polite." },
+        ],
+      },
+      {
+        title: "SEO",
+        items: [
+          { icon: "search", text: "Meta description, OG/Twitter, JSON-LD, dan canonical konsisten dengan brand baru." },
+          { icon: "file-text", text: "robots.txt & sitemap menunjuk domain motionkey.vercel.app." },
+        ],
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Changelog"
+  description="Riwayat pembaruan MotionKey: fitur baru, perbaikan, dan peningkatan di setiap versi."
+  ogType="website"
+>
+  <PageHero
+    eyebrow="Catatan Rilis"
+    icon="clock"
+    title="Changelog"
+    description="Semua yang berubah di MotionKey, versi demi versi — fitur baru, peningkatan, dan perbaikan."
+  />
+
+  <div class="relative mx-auto max-w-3xl px-4 pb-20 sm:px-6">
+    <ol class="relative space-y-10 border-l border-[var(--line)] pl-6 sm:pl-8">
+      {
+        releases.map((r) => (
+          <li class="relative">
+            <span class="absolute -left-[31px] top-1 grid h-4 w-4 place-items-center sm:-left-[39px]" aria-hidden="true">
+              <span class="absolute h-4 w-4 rounded-full bg-accent-500/25" />
+              <span class="relative h-2 w-2 rounded-full bg-accent-400" />
+            </span>
+            <article class="rounded-2xl border border-[var(--line)] bg-[var(--card)] p-5 transition-colors duration-300 hover:border-[var(--line-strong)] sm:p-6">
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <h2 class="font-display text-xl font-bold tracking-tight text-[var(--text-1)]">v{r.version}</h2>
+                <span class={`rounded-full border px-2.5 py-0.5 text-[11.5px] font-medium ${r.tagClass}`}>{r.tag}</span>
+                <time class="ml-auto text-[12.5px] text-[var(--text-3)]">{r.date}</time>
+              </div>
+              <p class="mt-2.5 text-[13.5px] leading-relaxed text-[var(--text-2)]">{r.summary}</p>
+              {r.sections.map((s) => (
+                <section class="mt-5">
+                  <h3 class="mb-2.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[var(--text-3)]">{s.title}</h3>
+                  <ul class="space-y-2.5">
+                    {s.items.map((it) => (
+                      <li class="flex items-start gap-2.5 text-[13.5px] leading-relaxed text-[var(--text-2)]">
+                        <span class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[var(--line)] bg-[var(--card-hover)] text-accent-300">
+                          <Icon name={it.icon} class="h-3 w-3" />
+                        </span>
+                        <span set:html={it.text} />
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </article>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</BaseLayout>

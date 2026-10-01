@@ -1,5 +1,5 @@
-/* Zelora Unlock service worker — offline shell PWA */
-const VERSION = "zu-v2";
+/* MotionKey service worker — offline shell PWA */
+const VERSION = "mk-v1";
 const STATIC_CACHE = `${VERSION}-static`;
 const PAGE_CACHE = `${VERSION}-pages`;
 

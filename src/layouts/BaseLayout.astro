@@ -18,10 +18,10 @@ const {
   ogType = "website",
 } = Astro.props;
 
-const siteName = "Zelora Unlock";
+const siteName = "MotionKey";
 const fullTitle = title.includes(siteName) ? title : `${title} · ${siteName}`;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://zelora-unlock.vercel.app");
-const ogImage = new URL("/og.png", Astro.site ?? "https://zelora-unlock.vercel.app");
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://motionkey.vercel.app");
+const ogImage = new URL("/og.png", Astro.site ?? "https://motionkey.vercel.app");
 ---
 
 <!doctype html>
@@ -65,7 +65,7 @@ const ogImage = new URL("/og.png", Astro.site ?? "https://zelora-unlock.vercel.a
       (function () {
         var stored = null;
         try {
-          stored = localStorage.getItem("zu:theme");
+          stored = localStorage.getItem("mk:theme");
         } catch (e) {}
         var theme = stored === "light" || stored === "dark" ? stored : window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
         if (theme === "light") document.documentElement.classList.add("light");
@@ -74,7 +74,7 @@ const ogImage = new URL("/og.png", Astro.site ?? "https://zelora-unlock.vercel.a
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      name: "Zelora Unlock",
+      name: "MotionKey",
       applicationCategory: "UtilitiesApplication",
       operatingSystem: "Any",
       description,
