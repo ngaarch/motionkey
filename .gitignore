@@ -29,3 +29,4 @@ coverage
 
 # smoke test
 .smoke
+.env*

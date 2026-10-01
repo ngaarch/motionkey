@@ -151,6 +151,9 @@ import Icon from "@/components/Icon.astro";
         <button id="s2-skip" type="button" class="mx-auto block text-[12px] text-[var(--text-3)] underline-offset-4 transition-colors hover:text-accent-300 hover:underline">
           Sudah punya link verifikasi? Langsung ke Step 3
         </button>
+        <p class="text-center text-[11.5px] text-[var(--text-3)]">
+          Setelah link terkirim, tombol ini terkunci 30 detik untuk mencegah spam — tunggu hitungannya selesai.
+        </p>
       </section>
 
       <section data-panel="3" hidden class="space-y-5">
@@ -647,5 +650,8 @@ import Icon from "@/components/Icon.astro";
   updateS1State();
   updateS3State();
   tickCooldown();
-  setPanel(initialStep);
+  // Deep-link hanya dihormati jika email valid — mencegah terjebak di
+  // Step 2/3 dengan tombol yang disabled tanpa penjelasan.
+  const emailOk = emailSchema.safeParse(state.email).success;
+  setPanel(emailOk ? initialStep : 1);
 </script>
